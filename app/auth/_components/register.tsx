@@ -11,10 +11,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AuthStateType } from "@/hooks/useAuthState";
+import { cn } from "@/lib/utils";
 import { registerSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const Register = ({
@@ -25,11 +30,15 @@ const Register = ({
   setStep: (step: AuthStateType["step"]) => void;
   className?: string;
 }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const email = useRef<HTMLInputElement>(null);
+  const username = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams(),
     existEmail = searchParams.get("email"),
     existFullName = searchParams.get("fullName"),
     existUsername = searchParams.get("username");
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -44,9 +53,47 @@ const Register = ({
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof registerSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    setLoading(true);
+    axios
+      .post("/api/auth/register", values)
+      .then((res) => {
+        setLoading(false);
+        toast.success("User created successfully", {
+          position: "top-center",
+        });
+        console.log(res);
+
+        form.reset();
+        router.push("/auth");
+        setStep("login");
+      })
+      .catch((err) => {
+        if (err.response.data.errors) {
+          setLoading(false);
+          (err.response.data.errors as { [key: string]: string }[]).map(
+            (error) => {
+              if (error.code === "email_exist") {
+                form.setError("email", {
+                  type: "custom",
+                  message: error.message,
+                });
+                email.current?.classList.add("border-destructive");
+              } else if (error.code === "username_exist") {
+                form.setError("username", {
+                  type: "custom",
+                  message: error.message,
+                });
+                username.current?.classList.add("border-destructive");
+              }
+            }
+          );
+        } else {
+          setLoading(false);
+          toast.error(err.response.data.message, {
+            position: "top-center",
+          });
+        }
+      });
   }
   return (
     <div className={`w-full h-screen bg-background flex ${className}`}>
@@ -107,6 +154,7 @@ const Register = ({
                               }&username=${existUsername || ""}`
                             );
                           }}
+                          disabled={loading}
                         />
                       </FormControl>
                       <FormMessage />
@@ -141,6 +189,8 @@ const Register = ({
                               }&username=${e.target.value}`
                             );
                           }}
+                          ref={username}
+                          disabled={loading}
                         />
                       </FormControl>
                       <FormMessage />
@@ -175,6 +225,8 @@ const Register = ({
                               }&username=${existFullName || ""}`
                             );
                           }}
+                          ref={email}
+                          disabled={loading}
                         />
                       </FormControl>
                       <FormMessage />
@@ -201,6 +253,7 @@ const Register = ({
                           type="password"
                           className="h-[52px] border-line text-[14px] font-medium leading-[22px] tracking-[0.07px] text-grayscale-60 dark:text-grayscale-60 bg-grayscale-10 dark:bg-dark px-[16px] m-0"
                           {...field}
+                          disabled={loading}
                         />
                       </FormControl>
                       <FormMessage />
@@ -227,6 +280,7 @@ const Register = ({
                           type="password"
                           className="h-[52px] border-line text-[14px] font-medium leading-[22px] tracking-[0.07px] text-grayscale-60 dark:text-grayscale-60 bg-grayscale-10 dark:bg-dark px-[16px] m-0"
                           {...field}
+                          disabled={loading}
                         />
                       </FormControl>
                       <FormMessage />
@@ -237,9 +291,13 @@ const Register = ({
               <div className="space-y-[24px]">
                 <Button
                   type="submit"
-                  className="w-full h-[58px] text-[18px] font-inter font-semibold leading-[26px] tracking-[0.09px] text-grayscale-10"
+                  className={cn(
+                    `w-full h-[58px] text-[18px] font-inter font-semibold leading-[26px] tracking-[0.09px] text-grayscale-10`,
+                    loading && "animate-pulse"
+                  )}
+                  disabled={loading}
                 >
-                  Login
+                  Register {loading && <Loader2 className="animate-spin" />}
                 </Button>
                 <Text
                   className="w-full text-center !text-grayscale-60"

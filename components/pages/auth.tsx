@@ -32,7 +32,7 @@ const Auth = () => {
     // step === "none" && window.location.replace("/");
     if (window) {
       window.scrollTo(0, 0);
-    }
+    } 
   }, [step]);
   const setManualStep = (step: AuthStateType["step"]): void => {
     localStorage.setItem("step", step);

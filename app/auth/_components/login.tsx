@@ -14,11 +14,14 @@ import { Input } from "@/components/ui/input";
 import { AuthStateType } from "@/hooks/useAuthState";
 import { loginSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Github, Instagram } from "lucide-react";
+import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const Login = ({
-  step,
+  // step,
   setStep,
   className,
 }: {
@@ -26,7 +29,28 @@ const Login = ({
   setStep: (step: AuthStateType["step"]) => void;
   className?: string;
 }) => {
-  console.log(step);
+  const session = useSession();
+  const handleLogin = async (values: z.infer<typeof loginSchema>) => {
+    const result = await signIn("Credentials", {
+      redirect: false,
+      ...values,
+    });
+    if (result?.error) {
+      toast.error(result.error, { position: "top-center" });
+    }
+    alert(result);
+
+    form.setError("username", {
+      type: "validate",
+      message: "Username or password is incorrect",
+    });
+    form.setError("password", {
+      type: "validate",
+      message: "Username or password is incorrect",
+    });
+  };
+
+  console.log(session);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -39,9 +63,7 @@ const Login = ({
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof loginSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    handleLogin(values);
   }
   return (
     <div className={`w-full h-screen bg-background flex ${className}`}>
@@ -72,6 +94,7 @@ const Login = ({
             <Button
               variant={"secondary"}
               className="w-full h-[48px] space-x-[16px]"
+              onClick={() => signIn("google")}
             >
               <GoogleIcon className="!w-[24px] !h-[24px]" />
               <Text weight="semibold">Login with Google</Text>
@@ -82,6 +105,22 @@ const Login = ({
             >
               <FacebookIcon className="!w-[24px] !h-[24px]" />
               <Text weight="semibold">Login with FaceBook</Text>
+            </Button>
+            <Button
+              variant={"secondary"}
+              className="w-full h-[48px] space-x-[10px]"
+              onClick={() => signIn("github")}
+            >
+              <Github size="24" />
+              <Text weight="semibold">Login with Github</Text>
+            </Button>
+            <Button
+              variant={"secondary"}
+              className="w-full h-[48px] space-x-[10px]"
+              onClick={() => signIn("instagram")}
+            >
+              <Instagram size="24" />
+              <Text weight="semibold">Login with Instagram</Text>
             </Button>
           </div>
           <div className="relative flex items-center justify-center w-full py-[24px]">
