@@ -69,6 +69,16 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -77,6 +87,7 @@ export default {
       },
       fontFamily: {
         inter: ["var(--font-inter)", "sans-serif"],
+        "plus-jakarta-sans": ["var(--font-plus-jakarta-sans)", "sans-serif"],
       },
     },
     keyframes: {
@@ -91,12 +102,20 @@ export default {
         },
       },
       "caret-blink": {
-        "0%,70%,100%": { opacity: "1" },
-        "20%,50%": { opacity: "0" },
+        "0%,70%,100%": {
+          opacity: "1",
+        },
+        "20%,50%": {
+          opacity: "0",
+        },
       },
       spin: {
-        "0%": { transform: "rotate(0deg)" },
-        "100%": { transform: "rotate(360deg)" },
+        "0%": {
+          transform: "rotate(0deg)",
+        },
+        "100%": {
+          transform: "rotate(360deg)",
+        },
       },
     },
     animation: {
@@ -106,6 +125,14 @@ export default {
       "hide-section-reverse": "hide-section-reverse 0.3s ease-in-out",
       "caret-blink": "caret-blink 1.25s ease-out infinite",
       spin: "spin 1s linear infinite",
+    },
+    screens: {
+      xs: "480px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
     },
   },
   plugins: [require("tailwindcss-animate")],

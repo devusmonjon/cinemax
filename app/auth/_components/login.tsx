@@ -3,6 +3,14 @@ import Heading from "@/components/typography/headings";
 import Text from "@/components/typography/text";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Form,
   FormControl,
   FormField,
@@ -11,10 +19,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { AuthStateType } from "@/hooks/useAuthState";
 import { loginSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Github, Instagram } from "lucide-react";
+import { Github, Instagram, Waypoints } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -31,23 +45,22 @@ const Login = ({
 }) => {
   const session = useSession();
   const handleLogin = async (values: z.infer<typeof loginSchema>) => {
-    const result = await signIn("Credentials", {
+    const result = await signIn("credentials", {
       redirect: false,
+      callbackUrl: "/",
       ...values,
     });
     if (result?.error) {
       toast.error(result.error, { position: "top-center" });
+      form.setError("username", {
+        type: "validate",
+        message: "Username or password is incorrect",
+      });
+      form.setError("password", {
+        type: "validate",
+        message: "Username or password is incorrect",
+      });
     }
-    alert(result);
-
-    form.setError("username", {
-      type: "validate",
-      message: "Username or password is incorrect",
-    });
-    form.setError("password", {
-      type: "validate",
-      message: "Username or password is incorrect",
-    });
   };
 
   console.log(session);
@@ -78,7 +91,7 @@ const Login = ({
           </Text>
         </div>
       </div>
-      <div className="w-full duration-300 xl:max-w-[50%] max-w-full h-full flex flex-col items-center">
+      <div className="w-full duration-300 xl:max-w-[50%] max-w-full h-full flex flex-col items-center overflow-y-auto px-6 sm:px-0">
         <Text size="xl" weight="bold" className="pt-[32px]">
           CineMax
         </Text>
@@ -91,37 +104,102 @@ const Login = ({
             Hey there, welcome back
           </Heading>
           <div className="space-y-[24px] pt-[40px] w-full">
-            <Button
-              variant={"secondary"}
-              className="w-full h-[48px] space-x-[16px]"
-              onClick={() => signIn("google")}
-            >
-              <GoogleIcon className="!w-[24px] !h-[24px]" />
-              <Text weight="semibold">Login with Google</Text>
-            </Button>
-            <Button
-              variant={"secondary"}
-              className="w-full h-[48px] space-x-[10px]"
-            >
-              <FacebookIcon className="!w-[24px] !h-[24px]" />
-              <Text weight="semibold">Login with FaceBook</Text>
-            </Button>
-            <Button
-              variant={"secondary"}
-              className="w-full h-[48px] space-x-[10px]"
-              onClick={() => signIn("github")}
-            >
-              <Github size="24" />
-              <Text weight="semibold">Login with Github</Text>
-            </Button>
-            <Button
-              variant={"secondary"}
-              className="w-full h-[48px] space-x-[10px]"
-              onClick={() => signIn("instagram")}
-            >
-              <Instagram size="24" />
-              <Text weight="semibold">Login with Instagram</Text>
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant={"secondary"}
+                  className="w-full h-[48px] space-x-[16px]"
+                >
+                  <Waypoints size="24" />
+                  <Text weight="semibold">Login with Social</Text>
+                </Button>
+                {/* <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild></TooltipTrigger>
+                    <TooltipContent>
+                      <p>Login with your social account</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider> */}
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Login with Social</DialogTitle>
+                  <DialogDescription>
+                    You can login with your social account
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-[24px] pt-[40px] w-full">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={"secondary"}
+                          className="w-full h-[48px] space-x-[16px]"
+                          onClick={() => signIn("google")}
+                        >
+                          <GoogleIcon className="!w-[24px] !h-[24px]" />
+                          <Text weight="semibold">Login with Google</Text>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Login with your Google account</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={"secondary"}
+                          className="w-full h-[48px] space-x-[10px]"
+                        >
+                          <FacebookIcon className="!w-[24px] !h-[24px]" />
+                          <Text weight="semibold">Login with FaceBook</Text>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>immediately unavailable</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={"secondary"}
+                          className="w-full h-[48px] space-x-[10px]"
+                          onClick={() => signIn("github")}
+                        >
+                          <Github size="24" />
+                          <Text weight="semibold">Login with Github</Text>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Login with your GitHub account</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={"secondary"}
+                          className="w-full h-[48px] space-x-[10px]"
+                          onClick={() => signIn("instagram")}
+                        >
+                          <Instagram size="24" />
+                          <Text weight="semibold">Login with Instagram</Text>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Login with your Instagram account</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
           <div className="relative flex items-center justify-center w-full py-[24px]">
             <div className="absolute w-full h-[1px] bg-grayscale-70 -z-0"></div>

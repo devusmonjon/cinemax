@@ -40,8 +40,14 @@ export const authOptions: AuthOptions = {
       async authorize(credentials) {
         await connectToDatabase();
         const user = await User.findOne({ username: credentials?.username });
+
         if (user) {
-          if (await compare(credentials?.password || "", user.password)) {
+          const isPasswordValid = await compare(
+            credentials?.password || "",
+            user.password
+          );
+
+          if (isPasswordValid) {
             return user;
           }
         }
@@ -63,8 +69,9 @@ export const authOptions: AuthOptions = {
           email: session.user?.email,
           username: session.user?.email,
           fullName: session.user?.name,
-          photo: session.user?.image,
+          image: session.user?.image,
           password: hashedPassword,
+          verifyied: true,
         });
 
         const mail = await transporter.sendMail({

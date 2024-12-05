@@ -45,10 +45,10 @@ const Forgot = ({
       position: "top-center",
       description: "Please enter the test OTP shown in the notification ",
     });
-    setStep("otp");
+    setStep("forgot-otp");
   };
   return (
-    <div className={`w-full h-screen bg-background ${className}`}>
+    <div className={`w-full h-screen bg-background ${className} px-6 sm:px-0`}>
       <Text
         onClick={() => setStep("login")}
         size="xl"

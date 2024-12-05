@@ -22,8 +22,9 @@ import Title from "./title";
 import { Button } from "@/components/ui/button";
 // import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
 
-const Verify = ({
+const ForgotVerify = ({
   step,
   setStep,
   className,
@@ -59,7 +60,7 @@ const Verify = ({
     form.resetField("otp");
   }, [step]);
   return (
-    <div className={`w-full h-screen bg-background ${className}`}>
+    <div className={`w-full h-screen bg-background ${className} px-6 xs:px-0`}>
       <Text
         onClick={() => setStep("login")}
         size="xl"
@@ -87,50 +88,44 @@ const Verify = ({
                     <FormControl>
                       <InputOTP
                         maxLength={6}
-                        inputMode="numeric"
-                        onBlur={field.onBlur}
-                        onChange={(text) => {
-                          // Faqat raqamlarni qoldiradi
-                          const onlyNumbers = text.replace(/[^0-9]/g, "");
-                          field.onChange(onlyNumbers);
-                        }}
-                        value={field.value}
+                        {...field}
+                        pattern={REGEXP_ONLY_DIGITS}
                       >
-                        <InputOTPGroup className="justify-center w-full gap-[24px]">
+                        <InputOTPGroup className="justify-center w-full gap-6 xs:gap-[24px] duration-300">
                           <InputOTPGroup>
                             <InputOTPSlot
                               index={0}
-                              className="w-[56px] h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
+                              className="w-[40px] xs:w-[56px] h-[40px] !rounded-[18px] !xs:rounded-[24px] xs:h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
                             />
                           </InputOTPGroup>
                           <InputOTPGroup>
                             <InputOTPSlot
                               index={1}
-                              className="w-[56px] h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
+                              className="w-[40px] xs:w-[56px] h-[40px] !rounded-[18px] !xs:rounded-[24px] xs:h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
                             />
                           </InputOTPGroup>
                           <InputOTPGroup>
                             <InputOTPSlot
                               index={2}
-                              className="w-[56px] h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
+                              className="w-[40px] xs:w-[56px] h-[40px] !rounded-[18px] !xs:rounded-[24px] xs:h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
                             />
                           </InputOTPGroup>
                           <InputOTPGroup>
                             <InputOTPSlot
                               index={3}
-                              className="w-[56px] h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
+                              className="w-[40px] xs:w-[56px] h-[40px] !rounded-[18px] !xs:rounded-[24px] xs:h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
                             />
                           </InputOTPGroup>
                           <InputOTPGroup>
                             <InputOTPSlot
                               index={4}
-                              className="w-[56px] h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
+                              className="w-[40px] xs:w-[56px] h-[40px] !rounded-[18px] !xs:rounded-[24px] xs:h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
                             />
                           </InputOTPGroup>
                           <InputOTPGroup>
                             <InputOTPSlot
                               index={5}
-                              className="w-[56px] h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
+                              className="w-[40px] xs:w-[56px] h-[40px] !rounded-[18px] !xs:rounded-[24px] xs:h-[56px] text-[24px] font-bold font-inter border border-line dark:bg-dark bg-grayscale-10 text-grayscale-70"
                             />
                           </InputOTPGroup>
                         </InputOTPGroup>
@@ -174,4 +169,4 @@ const Verify = ({
   );
 };
 
-export default Verify;
+export default ForgotVerify;

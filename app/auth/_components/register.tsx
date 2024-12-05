@@ -16,7 +16,7 @@ import { registerSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -33,19 +33,16 @@ const Register = ({
   const [loading, setLoading] = useState<boolean>(false);
   const email = useRef<HTMLInputElement>(null);
   const username = useRef<HTMLInputElement>(null);
+
   const router = useRouter();
-  const searchParams = useSearchParams(),
-    existEmail = searchParams.get("email"),
-    existFullName = searchParams.get("fullName"),
-    existUsername = searchParams.get("username");
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      fullName: existFullName || "",
-      username: existUsername || "",
-      email: existEmail || "",
+      fullName: "",
+      username: "",
+      email: "",
       password: "",
       passwordConfirm: "",
     },
@@ -56,16 +53,17 @@ const Register = ({
     setLoading(true);
     axios
       .post("/api/auth/register", values)
-      .then((res) => {
+      .then((/* res */) => {
         setLoading(false);
-        toast.success("User created successfully", {
+        toast.success("6 digit OTP has been sent to your email", {
           position: "top-center",
+          description:
+            "Please check your email, if you don't see it, check your spam folder.",
         });
-        console.log(res);
 
         form.reset();
-        router.push("/auth");
-        setStep("login");
+        router.push(`/auth?f-email=${btoa(values.email)}`);
+        setStep("register-otp");
       })
       .catch((err) => {
         if (err.response.data.errors) {
@@ -108,7 +106,7 @@ const Register = ({
           </Text>
         </div>
       </div>
-      <div className="w-full duration-300 xl:max-w-[50%] max-w-full h-full flex flex-col items-center overflow-y-auto pb-10 ">
+      <div className="w-full duration-300 xl:max-w-[50%] max-w-full h-full flex flex-col items-center overflow-y-auto pb-10 px-6 sm:px-0">
         <Text size="xl" weight="bold" className="pt-[32px]">
           CineMax
         </Text>
@@ -144,16 +142,7 @@ const Register = ({
                         <Input
                           placeholder="Enter your name"
                           className="h-[52px] border-line text-[14px] font-medium leading-[22px] tracking-[0.07px] text-grayscale-60 dark:text-grayscale-60 bg-grayscale-10 dark:bg-dark px-[16px] m-0"
-                          value={field.value}
-                          onBlur={() => field.onBlur()}
-                          onChange={(e) => {
-                            field.onChange(e.target.value);
-                            router.push(
-                              `/auth?email=${existEmail || ""}&fullName=${
-                                e.target.value
-                              }&username=${existUsername || ""}`
-                            );
-                          }}
+                          {...field}
                           disabled={loading}
                         />
                       </FormControl>
@@ -179,16 +168,7 @@ const Register = ({
                         <Input
                           placeholder="Enter your username"
                           className="h-[52px] border-line text-[14px] font-medium leading-[22px] tracking-[0.07px] text-grayscale-60 dark:text-grayscale-60 bg-grayscale-10 dark:bg-dark px-[16px] m-0"
-                          value={field.value}
-                          onBlur={() => field.onBlur()}
-                          onChange={(e) => {
-                            field.onChange(e.target.value);
-                            router.push(
-                              `/auth?email=${existEmail || ""}&fullName=${
-                                existFullName || ""
-                              }&username=${e.target.value}`
-                            );
-                          }}
+                          {...field}
                           ref={username}
                           disabled={loading}
                         />
@@ -215,16 +195,7 @@ const Register = ({
                         <Input
                           placeholder="Enter your email address"
                           className="h-[52px] border-line text-[14px] font-medium leading-[22px] tracking-[0.07px] text-grayscale-60 dark:text-grayscale-60 bg-grayscale-10 dark:bg-dark px-[16px] m-0"
-                          value={field.value}
-                          onBlur={() => field.onBlur()}
-                          onChange={(e) => {
-                            field.onChange(e.target.value);
-                            router.push(
-                              `/auth?email=${e.target.value}&fullName=${
-                                existFullName || ""
-                              }&username=${existFullName || ""}`
-                            );
-                          }}
+                          {...field}
                           ref={email}
                           disabled={loading}
                         />
