@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
-  // eslint-disable-next-line no-use-before-define
+  // @typescript-eslint/no-require-imports
   const serviceAccount = require("@/service_key.json");
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
