@@ -5,13 +5,13 @@ importScripts(
 
 // Replace these with your own Firebase config keys...
 const firebaseConfig = {
-  apiKey: "AIzaSyC7HzGO6nrMI3DUPe_cZDXCl9eFZJnl8fI",
-  authDomain: "cine-max-test.firebaseapp.com",
-  projectId: "cine-max-test",
-  storageBucket: "cine-max-test.firebasestorage.app",
-  messagingSenderId: "530144009723",
-  appId: "1:530144009723:web:4e1826791a9576a61fbf5e",
-  measurementId: "G-JBVLYLCSDN",
+  apiKey: "AIzaSyCpqTDypMMLAn8tB10BnIl56ebCAcWW6jo",
+  authDomain: "test-project-687e9.firebaseapp.com",
+  projectId: "test-project-687e9",
+  storageBucket: "test-project-687e9.firebasestorage.app",
+  messagingSenderId: "961091807826",
+  appId: "1:961091807826:web:483646db89afeeecae4d8b",
+  measurementId: "G-9G4FQRST70",
 };
 
 firebase.initializeApp(firebaseConfig);
