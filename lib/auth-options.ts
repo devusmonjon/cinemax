@@ -9,6 +9,18 @@ import { randomPasswordGenerator } from "./utils";
 import { transporter } from "./mail";
 import { compare, hash } from "bcrypt";
 
+interface SessionUser {
+  email: string;
+  username: string;
+  fullName: string;
+  image: string;
+  verifyied: boolean;
+  _id: string;
+  role: "ADMIN" | "USER";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export const authOptions: AuthOptions = {
   providers: [
     GitHubProvider({
@@ -48,6 +60,10 @@ export const authOptions: AuthOptions = {
           );
 
           if (isPasswordValid) {
+            console.log(user);
+
+            if (!user?.verified) return null;
+
             return user;
           }
         }
@@ -92,11 +108,29 @@ export const authOptions: AuthOptions = {
         });
 
         console.log(mail);
-
-        session.user = newUser;
+        session.user = {
+          email: newUser?.email,
+          username: newUser?.email,
+          fullName: newUser?.fullName,
+          image: newUser?.image,
+          verifyied: newUser?.verified,
+          _id: newUser?._id,
+          role: newUser?.role,
+          createdAt: newUser?.createdAt,
+          updatedAt: newUser?.updatedAt,
+        } as SessionUser;
       }
-      session.user = isExistingUser;
-      console.log(session);
+      session.user = {
+        email: isExistingUser?.email,
+        username: isExistingUser?.email,
+        fullName: isExistingUser?.fullName,
+        image: isExistingUser?.image,
+        verifyied: isExistingUser?.verified,
+        _id: isExistingUser?._id,
+        role: isExistingUser?.role,
+        createdAt: isExistingUser?.createdAt,
+        updatedAt: isExistingUser?.updatedAt,
+      } as SessionUser;
 
       return session;
     },

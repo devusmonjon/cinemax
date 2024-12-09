@@ -1,5 +1,5 @@
 "use client";
-import { AppSidebar } from "@/components/shared/sidebar";
+import { AppSidebar } from "@/app/(root)/_components/sidebar";
 import {
   SidebarProvider /* , SidebarTrigger */,
 } from "@/components/ui/sidebar";
@@ -32,9 +32,7 @@ const Layout: FC<Props> = ({ children }) => {
       <SidebarProvider>
         <Navbar />
         <AppSidebar />
-        <main className="min-h-[calc(100vh_++100vh)] mt-[72px]">
-          {children}
-        </main>
+        <main className="mt-[72px] w-full">{children}</main>
       </SidebarProvider>
     </>
   );

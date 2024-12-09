@@ -9,7 +9,13 @@ interface Props {
   className?: string;
 }
 
-const Heading: FC<Props> = ({ children, variant, weight, className }) => {
+const Heading: FC<Props & React.HTMLAttributes<HTMLHeadingElement>> = ({
+  children,
+  variant,
+  weight,
+  className,
+  ...props
+}) => {
   const [variantc, setVariantc] = useState<Props["variant"]>("h1");
   const [weightc, setWeightc] = useState<Props["weight"]>("medium");
 
@@ -32,6 +38,7 @@ const Heading: FC<Props> = ({ children, variant, weight, className }) => {
             weightc === "medium" && "font-medium",
             className
           )}
+          {...props}
         >
           {children}
         </h1>
@@ -46,6 +53,7 @@ const Heading: FC<Props> = ({ children, variant, weight, className }) => {
             weightc === "medium" && "font-medium",
             className
           )}
+          {...props}
         >
           {children}
         </h2>
@@ -60,6 +68,7 @@ const Heading: FC<Props> = ({ children, variant, weight, className }) => {
             weightc === "medium" && "font-medium",
             className
           )}
+          {...props}
         >
           {children}
         </h3>
@@ -74,6 +83,7 @@ const Heading: FC<Props> = ({ children, variant, weight, className }) => {
             weightc === "medium" && "font-medium",
             className
           )}
+          {...props}
         >
           {children}
         </h4>
@@ -88,6 +98,7 @@ const Heading: FC<Props> = ({ children, variant, weight, className }) => {
             weightc === "medium" && "font-medium",
             className
           )}
+          {...props}
         >
           {children}
         </h5>
@@ -102,6 +113,7 @@ const Heading: FC<Props> = ({ children, variant, weight, className }) => {
             weightc === "medium" && "font-medium",
             className
           )}
+          {...props}
         >
           {children}
         </h6>
@@ -116,6 +128,7 @@ const Heading: FC<Props> = ({ children, variant, weight, className }) => {
             weightc === "medium" && "font-medium",
             className
           )}
+          {...props}
         >
           {children}
         </h1>

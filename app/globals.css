@@ -48,8 +48,8 @@ body {
         --line: 210 10% 92%;
         /* alerts */
         --success: 126 72% 50%;
-        --warning: 349 81% 58%;
-        --error: 47 100% 55%;
+        --error: 349 81% 58%;
+        --warning: 47 100% 55%;
         --sidebar-background: 0 0% 98%;
         --sidebar-foreground: 240 5.3% 26.1%;
         --sidebar-primary: 240 5.9% 10%;
