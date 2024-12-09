@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
+    "dev": "next dev --experimental-https",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "clsx": "^2.1.1",
     "express": "^4.21.1",
     "firebase": "^11.0.2",
+    "firebase-admin": "^13.0.1",
     "input-otp": "^1.4.1",
     "lucide-react": "^0.460.0",
     "mongoose": "^8.8.3",

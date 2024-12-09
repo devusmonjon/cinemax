@@ -15,7 +15,7 @@ import { ArrowDown, NotificationIcon, SearchIcon } from "@/icons";
 import { INotification } from "@/interfaces";
 import { isActive } from "@/lib/helpers";
 import { cn } from "@/lib/utils";
-import { LogOut, RefreshCw } from "lucide-react";
+import { LogOut, RefreshCw, ShieldCheck } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -219,6 +219,20 @@ const Navbar = () => {
               }
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            {
+              // @ts-expect-error: error not defined
+              data?.user?.role === "ADMIN" && (
+                <DropdownMenuItem asChild>
+                  <Button
+                    variant="secondary"
+                    className="w-full cursor-pointer"
+                    onClick={() => router.push("/admin")}
+                  >
+                    <ShieldCheck size={24} /> Admin Dashboard
+                  </Button>
+                </DropdownMenuItem>
+              )
+            }
             <DropdownMenuItem
               onClick={() => router.push("/profile")}
               className="cursor-pointer"

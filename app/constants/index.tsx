@@ -1,4 +1,10 @@
-import { DiscoveryIcon, StopwatchIcon, TopRatedIcon } from "@/icons";
+import {
+  DiscoveryIcon,
+  NotificationIcon,
+  StopwatchIcon,
+  TopRatedIcon,
+} from "@/icons";
+import { ChartNoAxesCombined } from "lucide-react";
 
 interface INavLinks {
   title: string;
@@ -41,5 +47,17 @@ export const SIDEBAR_MENU_ITEMS: ISidebarMenuItems[] = [
     title: "Coming Soon",
     url: "/coming-soon",
     icon: <StopwatchIcon className="!min-w-[24px] !min-h-[24px]" />,
+  },
+];
+export const AMIN_SIDEBAR_MENU_ITEMS: ISidebarMenuItems[] = [
+  {
+    title: "Statistics",
+    url: "/admin/statistics",
+    icon: <ChartNoAxesCombined />,
+  },
+  {
+    title: "Notifications",
+    url: "/admin/notifications",
+    icon: <NotificationIcon className="!min-w-[24px] !min-h-[24px]" />,
   },
 ];
