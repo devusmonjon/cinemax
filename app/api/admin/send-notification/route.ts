@@ -6,9 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
-  // @typescript-eslint/no-require-imports
-  const serviceAccount = require("@/service_key.json");
+  const serviceAccount = await import("@/service_key.json");
   admin.initializeApp({
+    // @ts-expect-error: error not defined
     credential: admin.credential.cert(serviceAccount),
   });
 }
