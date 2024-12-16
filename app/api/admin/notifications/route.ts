@@ -78,3 +78,107 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function PATCH(req: Request) {
+  try {
+    const { notification_id } = await req.json();
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json(
+        {
+          errors: [
+            {
+              code: "unauthenticated",
+              message: "You are not authenticated",
+            },
+          ],
+          payload: null,
+          status: 401,
+          success: false,
+        },
+        { status: 401 }
+      );
+    }
+
+    const notification = await Notification.findOneAndUpdate(
+      {
+        // @ts-expect-error: error not defined
+        user_id: session?.user?._id as string,
+        _id: notification_id,
+      },
+      { isViewed: true },
+      { new: true }
+    );
+
+    return NextResponse.json({
+      errors: null,
+      payload: notification,
+      status: 200,
+      success: true,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        errors: [
+          {
+            code: "server_error",
+            message: error,
+          },
+        ],
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT() {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json(
+        {
+          errors: [
+            {
+              code: "unauthenticated",
+              message: "You are not authenticated",
+            },
+          ],
+          payload: null,
+          status: 401,
+          success: false,
+        },
+        { status: 401 }
+      );
+    }
+
+    const notification = await Notification.updateMany(
+      {
+        // @ts-expect-error: error not defined
+        user_id: session?.user?._id as string,
+        viewedAt: null,
+        isViewed: false,
+      },
+      { isViewed: true, viewedAt: new Date().toISOString() },
+      { new: true }
+    );
+
+    return NextResponse.json({
+      errors: null,
+      payload: notification,
+      status: 200,
+      success: true,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        errors: [
+          {
+            code: "server_error",
+            message: error,
+          },
+        ],
+      },
+      { status: 500 }
+    );
+  }
+}

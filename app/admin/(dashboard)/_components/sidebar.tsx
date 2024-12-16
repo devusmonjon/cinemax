@@ -19,6 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useTheme } from "next-themes";
 import NoSSR from "react-no-ssr";
+import { ArrowRight } from "lucide-react";
 
 // Menu items.
 
@@ -40,45 +41,133 @@ export function AdminSidebar() {
               </Text>
             </SidebarGroupLabel>
             <SidebarGroupContent className="pt-[16px]">
-              <SidebarMenu className="gap-4">
-                {AMIN_SIDEBAR_MENU_ITEMS.map((item) => (
-                  <SidebarMenuItem key={item.title} className="bg-none">
-                    <Link
-                      href={item.url}
-                      className={cn(
-                        "w-full text-start px-[28px] py-[8px] flex items-center gap-2 duration-300 relative group hover:text-primary text-grayscale-70",
-                        isActive(
-                          pathname.replace("/admin", ""),
-                          item.url.replace("/admin", "")
-                        ) && "text-primary"
-                      )}
-                    >
-                      {item.icon}
-                      <Text
-                        size="md"
-                        weight="semibold"
+              <SidebarMenu className="gap-4" key={Math.random()}>
+                {AMIN_SIDEBAR_MENU_ITEMS.map((item) => {
+                  if (item.children) {
+                    return (
+                      <>
+                        <SidebarMenuItem key={item.title} className="bg-none">
+                          <Link
+                            href={item.url}
+                            className={cn(
+                              "w-full text-start px-[28px] py-[8px] flex items-center gap-2 duration-300 relative group hover:text-primary text-grayscale-70",
+                              isActive(
+                                pathname.replace("/admin", ""),
+                                item.url.replace("/admin", "")
+                              ) && "text-primary"
+                            )}
+                          >
+                            {item.icon}
+                            <Text
+                              size="md"
+                              weight="semibold"
+                              className={cn(
+                                "!text-inherit w-full h-full",
+                                isActive(
+                                  pathname.replace("/admin", ""),
+                                  item.url.replace("/admin", "")
+                                ) &&
+                                  "!text-grayscale-100 dark:!text-grayscale-10"
+                              )}
+                            >
+                              {item.title}
+                            </Text>
+                            <span
+                              className={cn(
+                                "absolute h-6 w-1 left-0 top-2 bg-primary opacity-0 duration-300",
+                                isActive(
+                                  pathname.replace("/admin", ""),
+                                  item.url.replace("/admin", "")
+                                ) && "opacity-100"
+                              )}
+                            ></span>
+                          </Link>
+                        </SidebarMenuItem>
+                        {item.children.map((child) => (
+                          <SidebarMenuItem
+                            key={child.title}
+                            className="bg-none"
+                          >
+                            <Link
+                              href={child.url}
+                              className={cn(
+                                "w-full text-start px-[28px] py-[8px] flex items-center gap-2 duration-300 relative group hover:text-primary text-grayscale-70",
+                                isActive(
+                                  pathname.replace("/admin/series", ""),
+                                  child.url.replace("/admin/series", "")
+                                ) && "text-primary"
+                              )}
+                            >
+                              <ArrowRight size={20} />
+                              <span className="pl-1">{child.icon}</span>
+                              <Text
+                                size="md"
+                                weight="semibold"
+                                className={cn(
+                                  "!text-inherit w-full h-full",
+                                  isActive(
+                                    pathname.replace("/admin/series", ""),
+                                    child.url.replace("/admin/series", "")
+                                  ) &&
+                                    "!text-grayscale-100 dark:!text-grayscale-10"
+                                )}
+                              >
+                                {child.title}
+                              </Text>
+                              <span
+                                className={cn(
+                                  "absolute h-6 w-1 left-0 top-2 bg-primary opacity-0 duration-300",
+                                  isActive(
+                                    pathname.replace("/admin/series", ""),
+                                    child.url.replace("/admin/series", "")
+                                  ) && "opacity-100"
+                                )}
+                              ></span>
+                            </Link>
+                          </SidebarMenuItem>
+                        ))}
+                      </>
+                    );
+                  }
+                  return (
+                    <SidebarMenuItem key={item.title} className="bg-none">
+                      <Link
+                        href={item.url}
                         className={cn(
-                          "!text-inherit w-full h-full",
+                          "w-full text-start px-[28px] py-[8px] flex items-center gap-2 duration-300 relative group hover:text-primary text-grayscale-70",
                           isActive(
                             pathname.replace("/admin", ""),
                             item.url.replace("/admin", "")
-                          ) && "!text-grayscale-100 dark:!text-grayscale-10"
+                          ) && "text-primary"
                         )}
                       >
-                        {item.title}
-                      </Text>
-                      <span
-                        className={cn(
-                          "absolute h-6 w-1 left-0 top-2 bg-primary opacity-0 duration-300",
-                          isActive(
-                            pathname.replace("/admin", ""),
-                            item.url.replace("/admin", "")
-                          ) && "opacity-100"
-                        )}
-                      ></span>
-                    </Link>
-                  </SidebarMenuItem>
-                ))}
+                        {item.icon}
+                        <Text
+                          size="md"
+                          weight="semibold"
+                          className={cn(
+                            "!text-inherit w-full h-full",
+                            isActive(
+                              pathname.replace("/admin", ""),
+                              item.url.replace("/admin", "")
+                            ) && "!text-grayscale-100 dark:!text-grayscale-10"
+                          )}
+                        >
+                          {item.title}
+                        </Text>
+                        <span
+                          className={cn(
+                            "absolute h-6 w-1 left-0 top-2 bg-primary opacity-0 duration-300",
+                            isActive(
+                              pathname.replace("/admin", ""),
+                              item.url.replace("/admin", "")
+                            ) && "opacity-100"
+                          )}
+                        ></span>
+                      </Link>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
               <Text
                 size="md"

@@ -15,7 +15,14 @@ import { ArrowDown, NotificationIcon, SearchIcon } from "@/icons";
 import { INotification } from "@/interfaces";
 import { isActive } from "@/lib/helpers";
 import { cn } from "@/lib/utils";
-import { LogOut, RefreshCw, ShieldCheck } from "lucide-react";
+import {
+  Check,
+  CheckCheck,
+  LogOut,
+  RefreshCw,
+  ShieldCheck,
+  UserRound,
+} from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -62,8 +69,16 @@ const Navbar = () => {
   useEffect(() => {
     fetchNotifications();
   }, [pathname, limit]);
-  console.log(notifications);
 
+  const handleVeiwAllNotifications = async () => {
+    setLoading(true);
+    const response = await fetch("/api/admin/notifications", {
+      method: "PUT",
+    })
+      .then((res) => res.json())
+      .finally(() => fetchNotifications());
+    console.log(response);
+  };
   return (
     <nav className="fixed top-0 left-0 w-full h-[72px] flex items-center z-50 bg-background">
       <div className="min-w-[257px]">
@@ -122,7 +137,7 @@ const Navbar = () => {
           <DropdownMenuContent className="w-[300px] mt-[15px] overflow-hidden">
             <DropdownMenuLabel className="flex items-center justify-between">
               Notifications{" "}
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
                   className={cn(
@@ -133,17 +148,54 @@ const Navbar = () => {
                 >
                   <RefreshCw />
                 </Button>
+                <Button
+                  variant="ghost"
+                  className={cn("py-2 px-2")}
+                  onClick={handleVeiwAllNotifications}
+                >
+                  <CheckCheck />
+                </Button>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <div className="h-[336px] overflow-y-auto">
+            <div className="h-[336px] overflow-y-auto space-y-4 pr-2">
               {notifications &&
                 notifications?.length > 0 &&
                 notifications.map((notification) => (
                   <DropdownMenuItem
-                    className="cursor-pointer items-start"
+                    className={cn(
+                      "cursor-pointer items-start pb-8 relative",
+                      notification.isViewed && "bg-muted/30"
+                    )}
                     key={notification._id}
                   >
+                    <div className="absolute bottom-1 right-2 whitespace-nowrap w-full">
+                      <Text
+                        size="sm"
+                        weight="medium"
+                        className="!text-muted-foreground w-full flex whitespace-nowrap justify-end gap-2"
+                      >
+                        {new Date().getFullYear() <
+                        new Date(notification.createdAt).getFullYear()
+                          ? new Date(notification.createdAt).toLocaleString()
+                          : new Date(
+                              notification.createdAt
+                            ).toLocaleTimeString()}
+                        {notification.isViewed ? (
+                          <span
+                            title={new Date(
+                              notification.viewedAt!
+                            ).toLocaleTimeString()}
+                          >
+                            <CheckCheck />
+                          </span>
+                        ) : (
+                          <span title="Not viewed">
+                            <Check />
+                          </span>
+                        )}
+                      </Text>
+                    </div>
                     <div
                       className={cn(
                         "min-w-[100px] min-h-[100px] rounded-md relative overflow-hidden",
@@ -155,6 +207,7 @@ const Navbar = () => {
                           src={notification?.image}
                           alt={notification.message}
                           fill
+                          className="object-cover object-center"
                         />
                       )}
                     </div>
@@ -221,7 +274,7 @@ const Navbar = () => {
             <DropdownMenuSeparator />
             {
               // @ts-expect-error: error not defined
-              data?.user?.role === "ADMIN" && (
+              data?.user?.role === "ADMIN" && !pathname.includes("/admin") && (
                 <DropdownMenuItem asChild>
                   <Button
                     variant="secondary"
@@ -233,6 +286,17 @@ const Navbar = () => {
                 </DropdownMenuItem>
               )
             }
+            {pathname.includes("/admin") && (
+              <DropdownMenuItem asChild>
+                <Button
+                  variant="secondary"
+                  className="w-full cursor-pointer"
+                  onClick={() => router.push("/")}
+                >
+                  <UserRound size={24} /> Go to Frontend
+                </Button>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
               onClick={() => router.push("/profile")}
               className="cursor-pointer"

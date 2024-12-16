@@ -7,7 +7,8 @@ import useAuthState from "@/hooks/useAuthState";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FC, useEffect } from "react";
-import Navbar from "./_components/navbar";
+import Navbar from "../../components/shared/navbar";
+import useFcmToken from "@/hooks/useFcmToken";
 
 interface Props {
   children: JSX.Element;
@@ -27,6 +28,27 @@ const Layout: FC<Props> = ({ children }) => {
       router.push("/auth");
     }
   }, [session]);
+  const { token, notificationPermissionStatus } = useFcmToken();
+
+  // const handleTestNotification = async () => {
+  //   const response = await fetch("/api/admin/send-notification", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       token: token,
+  //       title: "Test Notification",
+  //       message: "This is a test notification",
+  //       link: "/contact",
+  //     }),
+  //   });
+
+  //   const data = await response.json();
+  //   console.log(data);
+  // };
+  console.log(notificationPermissionStatus, token);
+
   return (
     <>
       <SidebarProvider>
