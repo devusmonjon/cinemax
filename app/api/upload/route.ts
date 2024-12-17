@@ -9,11 +9,20 @@ export const POST = async (req: Request) => {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const filePath = path.join(process.cwd(), "public/uploads", file.name);
+    const filename = `${Math.random()}-${Date.now().toLocaleString()}-${
+      file.name
+    }`;
+
+    const filePath = path.join(process.cwd(), "public/uploads", filename);
 
     await writeFile(filePath, buffer);
     return NextResponse.json(
-      { errors: null, payload: filePath, success: true, status: 200 },
+      {
+        errors: null,
+        payload: `/uploads/${filename}`,
+        success: true,
+        status: 200,
+      },
       { status: 200 }
     );
   } catch (error) {

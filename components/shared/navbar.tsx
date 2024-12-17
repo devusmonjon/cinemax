@@ -168,6 +168,7 @@ const Navbar = () => {
                       notification.isViewed && "bg-muted/30"
                     )}
                     key={notification._id}
+                    onClick={() => router.push(notification.url!)}
                   >
                     <div className="absolute bottom-1 right-2 whitespace-nowrap w-full">
                       <Text
@@ -258,6 +259,7 @@ const Navbar = () => {
                 <AvatarImage
                   src={data?.user?.image || ""}
                   alt={"Profile Picture"}
+                  className="object-cover"
                 />
                 <AvatarFallback>{fullName}</AvatarFallback>
               </Avatar>
@@ -298,7 +300,7 @@ const Navbar = () => {
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
-              onClick={() => router.push("/profile")}
+              onClick={() => router.push("/settings/profile")}
               className="cursor-pointer"
             >
               Profile

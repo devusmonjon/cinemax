@@ -143,10 +143,10 @@ export function AppSidebar() {
                 </SidebarMenuItem>
                 <SidebarMenuItem key={"Settings"} className="bg-none">
                   <Link
-                    href={"/profile"}
+                    href={"/settings"}
                     className={cn(
                       "w-full text-start px-[28px] py-[8px] flex items-center gap-2 duration-300 relative group hover:text-primary text-grayscale-70",
-                      isActive(pathname, "/profile") && "text-primary"
+                      isActive(pathname, "/settings") && "text-primary"
                     )}
                   >
                     <SettingsIcon className="!min-w-6 !min-h-6" />
@@ -155,7 +155,7 @@ export function AppSidebar() {
                       weight="semibold"
                       className={cn(
                         "!text-inherit w-full h-full",
-                        isActive(pathname, "/profile") &&
+                        isActive(pathname, "/settings") &&
                           "!text-grayscale-100 dark:!text-grayscale-10"
                       )}
                     >
@@ -164,7 +164,7 @@ export function AppSidebar() {
                     <span
                       className={cn(
                         "absolute h-6 w-1 left-0 top-2 bg-primary opacity-0 duration-300",
-                        isActive(pathname, "/profile") && "opacity-100"
+                        isActive(pathname, "/settings") && "opacity-100"
                       )}
                     ></span>
                   </Link>

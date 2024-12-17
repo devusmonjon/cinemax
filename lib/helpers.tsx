@@ -1,4 +1,4 @@
-export function isActive(path: string, pathname: string) {
+export function isActive(pathname: string, path: string) {
   if (!path || !pathname) return false;
 
   // Root path uchun alohida tekshiruv
@@ -8,6 +8,8 @@ export function isActive(path: string, pathname: string) {
   const cleanPath = path.replace(/^\/|\/$/g, "");
   const cleanPathname = pathname.replace(/^\/|\/$/g, "");
 
-  // Pathname ning boshlanishini path bilan taqqoslash
-  return cleanPathname.startsWith(cleanPath);
+  // Pathname ning boshlanishini path bilan yoki pathning o'zini taqqoslash
+  return (
+    cleanPathname === cleanPath || cleanPathname.startsWith(`${cleanPath}/`)
+  );
 }
